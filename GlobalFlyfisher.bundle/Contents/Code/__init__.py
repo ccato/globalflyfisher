@@ -49,15 +49,15 @@ def VideoList(title, category, items_per_page, page=1):
         try:
             vtitle = item.xpath('./div[3]/h2/a/text()')[0]
             thumb = item.xpath('./div[2]/div[1]/a/img/@src')[0]
-            summa = item.xpath('./div[4]/span/text()')[0]
+            desc = item.xpath('./div[4]/span/text()')[0]
             vdurl = item.xpath('./div[2]/div[1]/a/@href')[0]
 
             # Extract the video url by a bit of magic
             lastpos = thumb.rfind('/')
-            interestingpart = thumb[lastpos + 1:]
-            interestingparts = interestingpart.split('?')
-            interestingparts = interestingparts[0].split('.')
-            token = interestingparts[0]
+            part1 = thumb[lastpos + 1:]
+            part2 = part1.split('?')
+            part2 = part2[0].split('.')
+            token = part2[0]
             if "youtube" in thumb:
                 videourl = "https://www.youtube.com/watch?v=" + token
             else:
@@ -66,7 +66,7 @@ def VideoList(title, category, items_per_page, page=1):
             oc.add(VideoClipObject(
                 url=videourl,
                 title=vtitle,
-                summary=summa,
+                summary=desc,
                 thumb=Resource.ContentsOfURLWithFallback(url=thumb)
             ))
         except Exception:
